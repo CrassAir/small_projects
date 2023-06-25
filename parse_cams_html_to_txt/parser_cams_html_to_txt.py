@@ -29,7 +29,7 @@ def parser():
                 name = camera.select_one('.name').get_text()
                 if not ip or int(ip.split('.')[-1]) > 254:
                     continue
-                result_dict[desc(ip)] = f'{ip} cam{name}'
+                result_dict[desc(ip)] = f'{ip} cam{name},'
         with open(DEFAULT_OUTPUT_FILE_NAME, 'w+', encoding='utf-8') as o_file:
             o_file.writelines('\n'.join(list(result_dict.values())))
         with open(DEFAULT_SORTED_OUTPUT_FILE_NAME, 'w+', encoding='utf-8') as o_file:
