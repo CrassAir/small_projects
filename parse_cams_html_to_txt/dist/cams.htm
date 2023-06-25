@@ -1,0 +1,4165 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+		<title></title>
+		<style>
+div.green-list { 
+	background-color: #264246;
+	height: 100%;
+	width: 100%;
+	border: 1px solid black;
+	overflow: auto;
+	context-menu: selector(menu#list-menu);
+}
+
+table#cameras-list {
+	margin: 10px;
+	border-radius: 5px;
+	border-spacing: 0px;
+	background-color: #2a2a2a;
+	color: #ccc;
+	width: 100%;
+}
+
+thead {
+	background-color: #595858;
+	background-position-top:		6px;
+	background-position-right:	6px;
+	background-position-bottom:	6px;
+	background-position-left:		6px;
+	color: white;
+}
+thead > tr > td {
+	height: 40px !important;
+	border-radius: 3px;
+}
+
+td { 
+	height: 40px;
+	padding: 0px 15px 0px 15px;
+	text-align: center;
+	max-width: 15em;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+tbody > tr.camera > td:first-child {
+	padding-left: 35px;
+}
+tbody > tr.camera > td:last-child {
+	padding-right: 30px;
+}
+tbody > tr.camera:nth-child(odd) {
+	background-color: #262626;
+}
+tbody > tr.camera:nth-child(even) {
+	background-color: #2E2E2E;
+}
+tbody > tr.camera > td:first-child { 	text-align: left; border-left: none; } 
+tbody > tr.camera:current { background-color: #595959; }
+thead > tr.camera > td {
+	height: 20px;
+}
+tbody > tr.camera > td {
+	border-right: #171717 1px solid;
+	border-left:  #414141 1px solid;
+}
+
+.camera-detail > td {
+	color: white;
+	height: auto;
+	max-width: none;
+	padding: 0;
+}
+.camera-detail table { 
+	width: 100%;
+	border-spacing: 0;
+	margin-bottom: 1px !important;
+}
+.camera-detail .head {
+	color: #AFAEAE;
+	background-color: dark-grey;
+	border-bottom: 1px solid #515050 !important;
+	vertical-align: middle;
+}
+.camera-detail .head > th {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	font-size: 14px;
+	max-width: 10em;
+	text-align: center;
+}
+.camera-detail .body {
+	background-color: dark-grey;
+	border-top: 1px solid #666666 !important;
+}
+.camera-detail .body td {
+	font-weight: bolder;
+	font-size: 9pt;
+	height: auto;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+	color: white;
+}
+td[proto] { width: 15%; }
+
+td[ptz], td[imaging], td[codec]
+{ width: 2em; }
+
+td.ip		{ text-align: left; padding-left: 30px; padding-right: 0; }
+
+td.info:checked {
+	background-color: #595858;
+	border-radius: 5px 5px 0 0;
+	border: none;
+}
+
+.camera td:first-child {
+	background-repeat: no-repeat;
+	background-position-left: 6px;
+	background-position-top: 9px;
+	
+	foreground-repeat: no-repeat;
+	foreground-position-left: 16px;
+	foreground-position-top: 15px;
+}
+.camera[analog]	 						td:first-child { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2pJREFUeNrslG1IU1EYx//3TvcuWlRTUxcRpRaUoBmOskj6WMz6YBRJQdEs+hJEIEREH6JAISgpP1hBUV+isqgMi2Zeq0Wl1tyc2Jvlyza3NXW65j095+ZMqIjevvVc/txzz73n97yc51yBMYbUAstsAJUkG6mFdJvk4OpzNHvxGyZMgA/v27Gtcnf5Zjx94cT9Rw60drhIbviDwdiEk19yFgc3X645XpQ6PQWiIEKt0UCv1UKj0UIWGNqcbtgdT37JmWDKL5qpEjDQeuMKOj0eiKL49aUgQK1WQ0tOtFoNkoxJ0Ot1YDTf1tFJmT1Gq8tN40lnz0i15KQ2gQabChflor+/H4FAQIFxcePZqFSqyTnuNO7MYDDAunoltlrXwpBk5FEkdHi6C05fuFhAFQAH2xbPnYPXb94gFAp9iZgBaelpKC4uRjQaRX19/Rc4XYwuPvb5fIrjeBB5S5ZADRn2x7wyaObg+QGvF7NMsyCPy/jQ+wFMZijbWIaKnRUID4WRn5+P5JRkxaHZnIVgMERApkSt1+sVsN3ehIMnTmFYZiepFE4OrrkkOWwPX7pgLVkFi6UIb9++g9Qiwe3uxIv2dmRkZAKUiDnLDElqwe2GBtpkASpSJMZog4EgBUXQGoLumtoV2TTeQx/a5iUbsKZ4BSzLLXA5XXjpdMJkMiEzM4MyGkfdmbNIS02Ddf0GVB6tg6wyIsJ6OKucoOemdsXJiYPBrYaXSyuKy7JTjCii6AuXLcWgbxA6nQ5V1dVYmJMDa6kVDfZnuNnkhC4lCz2990BQYWq7KZtXe2C/8rD90BEb/4AyYBzURHVrfiAhL28xnj9vRXp6OnJyc6Gj2t66J2GGuRBD4aHvHpCEeFvFYjFlgkP53Wg0IjFRjW6fH7ekR5imTsAnKgWveX84hmB4DGzgPUaG38cz/RY8TgtKS0tRUlKitJHf70dj4110ebqgGRpGj2+wqm80ugUfR2LJ6oFUjWcA46oRDAbbwETGoSe+C+YmyzLBGpXoh0dH4R0dw6tAEKGxMf76GpVo70RG6xD12ZCo/Kzu0Lz0w1LwJo9EIuj2+nHx+k286+3j5/48KUxqpMX34wtofJVuV3/2E1LA/Ng2UG8eq63jjwtocSf+0L5pN4JW4C+YckD+hYn4R/YfPGmfBRgAU0uZUlXa2DwAAAAASUVORK5CYII=); }
+.camera[network] 						td:first-child { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAATqSURBVDiNjdVpbFRVFMDx/9tm6dBpp0wXplIqFChTFAQLyOLCVpBEAyXGaFRU3BVIhQBG4xITjXGvuBDEGMUQBKMohqViTKRUCgYrQkEkFIHWKev0zczbrx+gDbWFeJL34Sbn/HLeubn3SkIIrhSVD68ZpqrKhz5VHi1JYNreHsdxH21cefeBK9VJl4OXLl/ik7RQTf3psheKiwv9wwcXgYAjf5/mzyPHjYkFR5fJbqr25Zde8f43XLN40dhQKGtteXm8MBMYFPyuMYHlXqj3qTK3jSkiZB1JNzcfPJpK6Xe+9urrv/dAhBDdvkU1T9U88+yy9L59+4RpmsJ1XdFbuK4rmg82e8+/+Jxes3jh3f91ui0eemT+yEU1C9Ktra3i1Okmcfb8gV7RznAcRyQSCbFk6dP6408+MuhSq2sU8x64N5AVzDpwzz33DagYNlhqPzkZ27EYWtHEb0372dnQgCzLjB8/nmuGD+/6W9M0aWpqEp9/8dkf6XRq5KqVq10AtXMknufN6V9SEi0fWi4ZhkG7WYIkB5j3wHw2b6nDF+iDwMPK6Mytrua92lpkWcZxHOLxuFQci5UePHSwCvgeQO6EZVmZFB9WETJNE09IVAxaw7dfDmXnL3sYfN0UPlr1Ke9/sJqSihvZtv1H3n7nHVzXxfM8bNsmHh8eFEKM6/Iu2cebYv1ikmVZOI6DZTms/vgT/Dn9ycnNI+QTZAclwgFBVjjGu7W12LZ9MdeiOFasKIoyuRPrGoVlWcWhUAjTNFEUhba2Nvrm5+OqYZp+3cWUW1agqhqFsWLChQPxaRqJRAJN07Btm1CfEJZll/boWJakA23/tHVtSDgcJp1Ok5OlIHApKb2aUaNHU1ZWRt9wENtxUFUVwzBwXZe21jY8z93bA06l0z/8feyYJ8syhmEghGDq1Kn0y1OJ5Bcz4Ya+LLg/Q/mQAHk5WcytrsYwDDKZDACH/zpspVKp7T1g0zR/2lG/I61pGq7rous6Tzz2GJUjKxgxMAc5GGdX87Wk0lEmjKtk/oMPkkqlsG0bSZLY2VBvO477c6fX7UjPrp69ddats26uml6ltbS0oKoq0WgUn89He/spFEUmEongui67dzdiGAYTJ05iy9YtVl3dtg0b1n91V6/wtKqp+YFA4M/lS5fnDBhQSiKRQNd1AEKhEACZTAbP89B1nSFDhnD8xHHeevvNVsMwhobD2XHg2Lq161t7XEJTpk2+MRgMfD1zxqzwnNlzFMdxMAwDy7IQQqBpGn6/H0VR2LjxG2vz1s1nM5nMzLy8iA68Aby6bu36+l5vtzETxo8KZQUb+kZytenTqigbVEYsFgPgxMkTHD58iG11dZw6c85OpTPXN9bXN91x51wJqAI2AqN6hUdUjt0Uycme0a8gKnvCQwiBYRhIkoTf77+QJARJPUOyo8O4KlZgA1lAGlgPLOgGS5IkAfkjKse0XFVYEIhG88iN5JKbk0t2OBshPDqSHSSTSSzLQlP9/Lij3mw7dnTKuXPnWyzLOiEugup/uwUU13X2nk3qo4r6Ffn6ZIeJ5udTWFCAqqokO5Ikkzpnz5yhoXGP7dj2/kSiPQMY4pIuex1FaWlpUZ+86EKfpt0OIiIE2UBAABIYSKSEJ85ZtrXpdOvJFYlEokUI4VxqXPbN65Z0YUSdh8kT/6PoX1lVu6VwBLU1AAAAAElFTkSuQmCC); }
+.camera[network][devline]		td:first-child { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABNlJREFUeNq0VV1sFFUU/uZ3/2a6u+3Mdtst/aFLl7JB2qi4mhqCVKrBAPpgog9EIz4YH3yTN598NSaEaIKGBINRYi1Ng0kjGkrkAVqpWEqhC+3alnbb3W63Xdqd3Z2ZHe+dbonB+OADN7m5c++Ze+Y73/nOGcayLDyJweIJDX7o2jD8VTICfh+20NOVYRiUy2WwLAuTrnRPzyt2VOwcy4pkJxF7lcPh8BOburq6VuA/PfUFOtrC2Ne5x3ZALxIHTp7jZMM0vaIg+E3LUgSeV4kpQM5rGZYNcBynsgyrCALvJ3uvLElyKpVyDgwMwDRNgycDssezU6mp+Yg4DJMLNSzH+YmDKvIskSmSaSOnK8ex5HlzvzVlScbk5CTOnDmD1tZWNDU1mXw0vL358MsHfgmqSmgzQubRha3nf66PT6fDianEfQxcHEBtbRBdXV1wu91xZuz2xKntTY0fEvj2izzHwyW6oOmazTc9s5NBIqPz8aEXdez74HkEjQYcO/oOorujWM5mP+YbQ/Wv0WTYYZIQM2sZDI4PomdXDwI1AVjYtCWTSUxMTFD+7KRJLgkrbBoX7pzHH2s3cCjYALVGPStJ0t07ib9O87qu1xSLRRuZW3Rj5MEIjv98HEOhIfg9fpTKJZuG0dFR27nL5YJhGICXwaDVj588P6L9pRa0eyKIz8x9rfO46hAE8AsLCxoJViKZhcAKkBkZse0xZOYySJQScHqcKBQKIADQ09MDVVVtxG54cGX8Iry6C43rTXgqsAf+tTosLi7CQXjn5+bnL1X7fG9TOiyLXGDcOKGeQPZBFhlHBmJetMNXFAUCQZLL5WxuOScPf16FvmygNhhEJLBLm00vJagfw9AJ4qWlT9KpFEt0WEuyuZtcVmSfjGq1mnzZYfNLHVPE8/PzFclxyLs1PF0Vw/plHfVKIyTD9+fU3PACpY1IFfxUKj2VmZ56iyGXS2C8O1qaOyW3u75slesM3YjmNe1dGj51TqpriReEKqIOF3Uebg3jsxe/xP72bpz7vv/k0PVrlkN0QBSIgpYfbrCxWKy7WpZjSiAQbQiFig5RPPb5yZO4MXkPfLEQe/ON19tbd+zoHxkeeS+3mpUFUVQIb4Hp6em6Vw70NFz69frS5bFb3wmyFwZtQDR5zzVvE57p7PxqZyTS6HQ6kVnJJnr7L+D3kREwTlfTwYMHl5/duxctLS3D2+rrV/r6+lYIzzMUcWFjA/HpSdy8Nw1eFAlSAbTbiFTzlXLVqNxWV1dJVpNSenHx9NEjR15QFSVKi4LaTMPQQqEQjhw+jB96e1EqlR6VuVApHFsAldU+sb9OJBWPx1E2TbV7//73U+n03J27d8/fGhu7spbLXa8L1t7Wid5DdfW25GZnZ+0Ot1WZ/2qbW62Sip6ikGT5wdlz3746cWtsMp/P6+sPH6Kjo2PTAUVeqbyt8V8/ChYUPhU8qahIWxu8Ph+jhELjzeGw7iRyEwl3NOT/3eiLBKWmaZJWKBgkAb9lk8lviKyY8K6otb6+jtmZGTsSitKy+zVj7yl1NAKq7wKhaEPToPObyTOI3JjRmzfZYCBwyOVyJ8yyOU5DTaZSoCWeXV7G4sICIpEImW30D0D7HeL374F+lA7Sx7G0lkM2nyc634yMoy32Sf1M/xZgAH5lIMCVQfS1AAAAAElFTkSuQmCC); }
+
+.camera[status="ok"]				td.status  {	foreground-image: url(images:22x22/accept.png); }
+.camera[status="error"]			td.status  {	foreground-image: url(images:22x22/warn.png); }
+.camera[status="disabled"]	td:first-child { foreground-image: url(images:16x16/process-stop.png); }
+
+.camera[status="disabled"]			td.info,
+.camera[status="not-connected"]	td.info { visibility: hidden; }
+
+.link
+{
+	behavior: clickable;
+	color: #CFCFCF;	
+	border-bottom: dashed 1px white;
+	text-decoration: none;
+}
+
+.link:tab-focus
+{
+	outline: 1px dotted 1 #CFCFCF;
+}
+
+.link:hover
+{
+	color: #77A1A3;
+	border-bottom: solid 1px #77A1A3;
+}
+
+.link:disabled
+{
+	color: #5D5D5D;
+	border-bottom: dashed 1px #5D5D5D;
+}
+
+a.weblink {
+	color: white;
+	behavior: clickable;
+	border-bottom: none;
+}
+a.weblink:disabled {
+	color: #5D5D5D;
+	border-bottom: none;
+}
+a.weblink:hover {
+	color: #77A1A3;
+	border-bottom: none;
+}
+
+		</style>
+	</head>
+	<body>
+
+<table id="cameras-list" >
+	<thead><tr>
+		<td class="index-camera"  title="Номер канала" >#</td>
+		<td>Видеоканал</td>
+		<td>IP-адрес</td>
+		<td>Порт</td>
+		<td>Имя</td>
+		<td>Пароль</td>
+		<td>Настройки</td>
+		<td>Инфо</td>
+		<td>Статус</td></tr>
+</thead>
+<tbody><tr class="camera"  status="error"  index="0"  network="" >
+	<td class="index-camera"  title="Номер канала" >1</td>
+	<td class="name" >1-КПП1</td>
+	<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.231" >10.10.200.231</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="0" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" >RVi-IPC32MS-IR V.2</td>
+	<td class="status network"  version="" >1.002.RVi 03.1.R, build: 2017-04-13</td>
+	<td class="status"  stream="1"  status="ok" >ОК</td>
+	<td class="status"  stream="2"  status="error" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="1"  network="" >
+<td class="index-camera"  title="Номер канала" >2</td>
+<td class="name" >2-Агрономический</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.54" >10.10.200.54</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="1" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="2"  network="" >
+<td class="index-camera"  title="Номер канала" >3</td>
+<td class="name" >3-Хугендорн</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.149" >10.10.200.149</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="2" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" >RVi-IPC32MS-IR V.2</td>
+	<td class="status network"  version="" >1.002.RVi 03.1.R, build: 2017-04-13</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="3"  network="" >
+<td class="index-camera"  title="Номер канала" >4</td>
+<td class="name" >4-СГП 1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.198" >10.10.200.198</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="3" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="4"  network="" >
+<td class="index-camera"  title="Номер канала" >5</td>
+<td class="name" >5-СГП 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.148" >10.10.200.148</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="4" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" >RVi-IPC32MS-IR V.2</td>
+	<td class="status network"  version="" >1.002.RVi 03.1.R, build: 2017-04-13</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="5"  network="" >
+<td class="index-camera"  title="Номер канала" >6</td>
+<td class="name" >6-СГП 3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.146" >10.10.200.146</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="5" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" >RVi-IPC32MS-IR V.2</td>
+	<td class="status network"  version="" >1.002.RVi 03.1.R, build: 2017-04-13</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="6"  network="" >
+<td class="index-camera"  title="Номер канала" >7</td>
+<td class="name" >7-Нач.склада</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.145" >10.10.200.145</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="6" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="7"  network="" >
+<td class="index-camera"  title="Номер канала" >8</td>
+<td class="name" >8-курилка</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.28" >192.168.253.28</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="7" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="8"  network="" >
+<td class="index-camera"  title="Номер канала" >9</td>
+<td class="name" >9-Актовый зал</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.166" >10.10.200.166</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="8" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (v2.x)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="9"  network="" >
+<td class="index-camera"  title="Номер канала" >10</td>
+<td class="name" >10-Скважина</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.55" >192.168.253.55</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="9" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="10"  network="" >
+<td class="index-camera"  title="Номер канала" >11</td>
+<td class="name" >11-Забор на розарий</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.56" >192.168.253.56</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="10" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="11"  network="" >
+<td class="index-camera"  title="Номер канала" >12</td>
+<td class="name" >12-Парковка</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.57" >192.168.253.57</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="11" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="12"  network="" >
+<td class="index-camera"  title="Номер канала" >13</td>
+<td class="name" >13-Въезд кпп1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.170" >10.10.200.170</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="12" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="13"  network="" >
+<td class="index-camera"  title="Номер канала" >14</td>
+<td class="name" >14-Над КПП1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.43" >192.168.253.43</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="13" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="14"  network="" >
+<td class="index-camera"  title="Номер канала" >15</td>
+<td class="name" >15-Котельная улица</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.172" >10.10.200.172</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="14" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="15"  network="" >
+<td class="index-camera"  title="Номер канала" >16</td>
+<td class="name" >16-Забор на сливные</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.173" >10.10.200.173</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="15" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="16"  network="" >
+<td class="index-camera"  title="Номер канала" >17</td>
+<td class="name" >17-Курилка улица</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.174" >10.10.200.174</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="16" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="17"  network="" >
+<td class="index-camera"  title="Номер канала" >18</td>
+<td class="name" >18-Вход салатка</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.52" >192.168.253.52</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="17" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="18"  network="" >
+<td class="index-camera"  title="Номер канала" >19</td>
+<td class="name" >19-СевЗап</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.189" >10.10.200.189</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="18" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="19"  network="" >
+<td class="index-camera"  title="Номер канала" >20</td>
+<td class="name" >20-СевВос1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.181" >10.10.200.181</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="19" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="20"  network="" >
+<td class="index-camera"  title="Номер канала" >21</td>
+<td class="name" >21-СевВос2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.184" >10.10.200.184</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="20" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="21"  network="" >
+<td class="index-camera"  title="Номер канала" >22</td>
+<td class="name" >22-СевВос3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.190" >10.10.200.190</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="21" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="22"  network="" >
+<td class="index-camera"  title="Номер канала" >23</td>
+<td class="name" >23-ЮгВос1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.185" >10.10.200.185</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="22" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="23"  network="" >
+<td class="index-camera"  title="Номер канала" >24</td>
+<td class="name" >24-ЮгВос2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.186" >10.10.200.186</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="23" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="24"  network="" >
+<td class="index-camera"  title="Номер канала" >25</td>
+<td class="name" >25-ЮгВос3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.22" >192.168.253.22</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="24" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_200514</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="25"  network="" >
+<td class="index-camera"  title="Номер канала" >26</td>
+<td class="name" >26-Юг</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.179" >10.10.200.179</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="25" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="26"  network="" >
+<td class="index-camera"  title="Номер канала" >27</td>
+<td class="name" >27-Север</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.176" >10.10.200.176</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="26" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="27"  network="" >
+<td class="index-camera"  title="Номер канала" >28</td>
+<td class="name" >28-ЮгЗап1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.34" >192.168.253.34</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="27" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190305</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="28"  network="" >
+<td class="index-camera"  title="Номер канала" >29</td>
+<td class="name" >29-Восток1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.187" >10.10.200.187</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="28" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="29"  network="" >
+<td class="index-camera"  title="Номер канала" >30</td>
+<td class="name" >30-ЮгЗап2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.33" >192.168.253.33</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="29" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="30"  network="" >
+<td class="index-camera"  title="Номер канала" >31</td>
+<td class="name" >31-ЮгЗап3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.183" >10.10.200.183</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="30" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="31"  network="" >
+<td class="index-camera"  title="Номер канала" >32</td>
+<td class="name" >32-Восток2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.29" >192.168.253.29</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="31" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="32"  network="" >
+<td class="index-camera"  title="Номер канала" >33</td>
+<td class="name" >33-Юг 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.180" >10.10.200.180</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="32" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="33"  network="" >
+<td class="index-camera"  title="Номер канала" >34</td>
+<td class="name" >34-Въезд</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.36" >192.168.253.36</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="33" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="34"  network="" >
+<td class="index-camera"  title="Номер канала" >35</td>
+<td class="name" >35-КПП1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.23" >192.168.253.23</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="34" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_200514</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="35"  network="" >
+<td class="index-camera"  title="Номер канала" >36</td>
+<td class="name" >36-АБК налево</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.14" >192.168.253.14</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="35" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="36"  network="" >
+<td class="index-camera"  title="Номер канала" >37</td>
+<td class="name" >37-Абк направо</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.15" >192.168.253.15</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="36" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="37"  network="" >
+<td class="index-camera"  title="Номер канала" >38</td>
+<td class="name" >38-Гараж ворота</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.7" >10.10.200.7</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="37" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Brickcom</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="ok"  title="" >ОК</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="38"  network="" >
+<td class="index-camera"  title="Номер канала" >39</td>
+<td class="name" >39-Внутренняя стоянка</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.6" >10.10.200.6</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="admin" >*****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="38" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Brickcom</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="39"  network="" >
+<td class="index-camera"  title="Номер канала" >40</td>
+<td class="name" >40-Гараж</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.91" >10.10.200.91</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="admin" >*****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="39" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.3.11.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="40"  network="" >
+<td class="index-camera"  title="Номер канала" >41</td>
+<td class="name" >41-Гараж2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.254" >192.168.253.254</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="40" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="41"  network="" >
+<td class="index-camera"  title="Номер канала" >42</td>
+<td class="name" >42-На ангаре</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.16" >192.168.253.16</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="41" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="disabled"  index="42"  network="" >
+<td class="index-camera"  title="Номер канала" >43</td>
+<td class="name" >43-КПП2 вход</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.49" >10.10.200.49</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="admin" >*****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Выключена" ></td></tr><tr class="camera-detail"  index="42" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Hunt</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="disabled"  index="43"  network="" >
+<td class="index-camera"  title="Номер канала" >44</td>
+<td class="name" >44-КПП2 ворота</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.57" >10.10.200.57</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="1111" >****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Выключена" ></td></tr><tr class="camera-detail"  index="43" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="2"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="44"  network="" >
+<td class="index-camera"  title="Номер канала" >45</td>
+<td class="name" >45-Магазин Кушкуль</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.24" >192.168.253.24</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="44" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="2"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="disabled"  index="45"  network="" >
+<td class="index-camera"  title="Номер канала" >46</td>
+<td class="name" >46-ТК Любимый</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://79.140.24.44" >79.140.24.44</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Выключена" ></td></tr><tr class="camera-detail"  index="45" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Камера недоступна" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="46"  network="" >
+<td class="index-camera"  title="Номер канала" >47</td>
+<td class="name" >47-Петровский</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://95.78.230.178" >95.78.230.178</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="46" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >3.11.0.4.0.38</td>
+	<td class="status"  stream="1"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="2"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="47"  network="" >
+<td class="index-camera"  title="Номер канала" >48</td>
+<td class="name" >48-Петровский2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://95.78.230.178" >95.78.230.178</a></td>
+<td class="port" >556</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="47" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="48"  network="" >
+<td class="index-camera"  title="Номер канала" >49</td>
+<td class="name" >49-Петровский3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://95.78.230.178" >95.78.230.178</a></td>
+<td class="port" >555</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="48" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >RTSP</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="49"  network="" >
+<td class="index-camera"  title="Номер канала" >50</td>
+<td class="name" >50-АБК вход</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.45" >192.168.253.45</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="49" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="ok"  title="" >ОК</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="50"  network="" >
+<td class="index-camera"  title="Номер канала" >51</td>
+<td class="name" >51-Коридор М</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.58" >192.168.253.58</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="50" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="51"  network="" >
+<td class="index-camera"  title="Номер канала" >52</td>
+<td class="name" >52-Коридор Ж</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.48" >10.10.200.48</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="admin" >*****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="51" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Hunt</td>
+	<td class="status network"  model="" >Device_24</td>
+	<td class="status network"  version="" >V1.0.36_SV</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="52"  network="" >
+<td class="index-camera"  title="Номер канала" >53</td>
+<td class="name" >53-Коридор Л</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.25" >10.10.200.25</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="1111" >****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="52" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >3.11.0.4.0.38</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="53"  network="" >
+<td class="index-camera"  title="Номер канала" >54</td>
+<td class="name" >54-Приёмная</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.10" >10.10.200.10</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="53" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >3.11.0.4.0.38</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="54"  network="" >
+<td class="index-camera"  title="Номер канала" >55</td>
+<td class="name" >55-АБК 2 этаж</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.90" >10.10.200.90</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="54" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="55"  network="" >
+<td class="index-camera"  title="Номер канала" >56</td>
+<td class="name" >56-Склад весы</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.47" >10.10.200.47</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="admin" >*****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="55" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Hunt</td>
+	<td class="status network"  model="" >Device_24</td>
+	<td class="status network"  version="" >V1.0.36_SV</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="56"  network="" >
+<td class="index-camera"  title="Номер канала" >57</td>
+<td class="name" >57-Склад ПК1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.95" >10.10.200.95</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="56" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.2.14.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="57"  network="" >
+<td class="index-camera"  title="Номер канала" >58</td>
+<td class="name" >58-Склад Ворота1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.100" >10.10.200.100</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="57" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.3.11.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="58"  network="" >
+<td class="index-camera"  title="Номер канала" >59</td>
+<td class="name" >59-Склад Ворота2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.96" >10.10.200.96</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="58" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.2.14.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="59"  network="" >
+<td class="index-camera"  title="Номер канала" >60</td>
+<td class="name" >60-Склад ПК2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.94" >10.10.200.94</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="59" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.3.11.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="60"  network="" >
+<td class="index-camera"  title="Номер канала" >61</td>
+<td class="name" >61-Склад Ворота3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.93" >10.10.200.93</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="60" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.2.14.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="disabled"  index="61"  network="" >
+<td class="index-camera"  title="Номер канала" >62</td>
+<td class="name" >62-Склад Весы2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.162.1" >192.168.162.1</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Выключена" ></td></tr><tr class="camera-detail"  index="61" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="62"  network="" >
+<td class="index-camera"  title="Номер канала" >63</td>
+<td class="name" >63-Сервисная зона</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.27" >192.168.253.27</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="62" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="2"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="63"  network="" >
+<td class="index-camera"  title="Номер канала" >64</td>
+<td class="name" >64-Фасовка</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.99" >10.10.200.99</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="63" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.3.11.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="64"  network="" >
+<td class="index-camera"  title="Номер канала" >65</td>
+<td class="name" >65-Вышка МТС</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.35" >192.168.253.35</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="64" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="65"  network="" >
+<td class="index-camera"  title="Номер канала" >66</td>
+<td class="name" >66-Вход в теплицы</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.72" >10.10.200.72</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="65" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >3.11.0.4.0.38</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="66"  network="" >
+<td class="index-camera"  title="Номер канала" >67</td>
+<td class="name" >67-Коридор операторская</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.44" >192.168.253.44</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="66" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="67"  network="" >
+<td class="index-camera"  title="Номер канала" >68</td>
+<td class="name" >68-Миксер розарий</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.18" >192.168.253.18</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="67" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="68"  network="" >
+<td class="index-camera"  title="Номер канала" >69</td>
+<td class="name" >69-Розарий</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.17" >192.168.253.17</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="68" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190802</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="69"  network="" >
+<td class="index-camera"  title="Номер канала" >70</td>
+<td class="name" >70-Весы коридор</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://10.10.200.92" >10.10.200.92</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="69" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >0.1.3.11.0.117</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="70"  network="" >
+<td class="index-camera"  title="Номер канала" >71</td>
+<td class="name" >71-Коридор 1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.37" >192.168.253.37</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="70" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="71"  network="" >
+<td class="index-camera"  title="Номер канала" >72</td>
+<td class="name" >72-Коридор 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.13" >192.168.253.13</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="71" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190802</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="72"  network="" >
+<td class="index-camera"  title="Номер канала" >73</td>
+<td class="name" >73-Коридор 3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.40" >192.168.253.40</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="72" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_200514</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="73"  network="" >
+<td class="index-camera"  title="Номер канала" >74</td>
+<td class="name" >74-Коридор 4</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.38" >192.168.253.38</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="73" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="74"  network="" >
+<td class="index-camera"  title="Номер канала" >75</td>
+<td class="name" >75-Га 1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.49" >192.168.253.49</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="74" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="75"  network="" >
+<td class="index-camera"  title="Номер канала" >76</td>
+<td class="name" >76-Га 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.21" >192.168.253.21</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="75" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_200514</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="76"  network="" >
+<td class="index-camera"  title="Номер канала" >77</td>
+<td class="name" >77-Га 3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.39" >192.168.253.39</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="76" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="77"  network="" >
+<td class="index-camera"  title="Номер канала" >78</td>
+<td class="name" >78-Га 4</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.50" >192.168.253.50</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="77" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="78"  network="" >
+<td class="index-camera"  title="Номер канала" >79</td>
+<td class="name" >79-Коридор 5</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.51" >192.168.253.51</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="78" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.1.3.5_170824</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="79"  network="" >
+<td class="index-camera"  title="Номер канала" >80</td>
+<td class="name" >80-Рассадное</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.53" >192.168.253.53</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="79" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="80"  network="" >
+<td class="index-camera"  title="Номер канала" >81</td>
+<td class="name" >81-Салатка 1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.25" >192.168.253.25</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="80" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="81"  network="" >
+<td class="index-camera"  title="Номер канала" >82</td>
+<td class="name" >82-Салатка 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.54" >192.168.253.54</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="81" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.4.8_180830</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="82"  network="" >
+<td class="index-camera"  title="Номер канала" >83</td>
+<td class="name" >83- АБК Вход Улица</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.46" >192.168.253.46</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="82" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P013.0(3.6)D</td>
+	<td class="status network"  version="" >V2.31.5.2_200420</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="83"  network="" >
+<td class="index-camera"  title="Номер канала" >84</td>
+<td class="name" >84-Петровский4</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://95.78.230.178" >95.78.230.178</a></td>
+<td class="port" >557</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="83" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF2</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="84"  network="" >
+<td class="index-camera"  title="Номер канала" >85</td>
+<td class="name" >85-КПП2-1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.10" >192.168.253.10</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="84" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190802</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="85"  network="" >
+<td class="index-camera"  title="Номер канала" >86</td>
+<td class="name" >86-КПП2-2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.11" >192.168.253.11</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="85" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="86"  network="" >
+<td class="index-camera"  title="Номер канала" >87</td>
+<td class="name" >87-КПП2-3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.12" >192.168.253.12</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="86" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_190428</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="87"  network="" >
+<td class="index-camera"  title="Номер канала" >88</td>
+<td class="name" >88-Га 2 back</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.20" >192.168.253.20</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="87" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D</td>
+	<td class="status network"  version="" >V3.31.5.0_200514</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="88"  network="" >
+<td class="index-camera"  title="Номер канала" >89</td>
+<td class="name" >89-Га 4 back</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.19" >192.168.253.19</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="88" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="89"  network="" >
+<td class="index-camera"  title="Номер канала" >90</td>
+<td class="name" >90-Вышка МТС 2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.26" >192.168.253.26</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="89" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="90"  network="" >
+<td class="index-camera"  title="Номер канала" >91</td>
+<td class="name" >91-Рассадное Back</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.30" >192.168.253.30</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="90" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="91"  network="" >
+<td class="index-camera"  title="Номер канала" >92</td>
+<td class="name" >92-Га 1 Back</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.31" >192.168.253.31</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="91" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="92"  network="" >
+<td class="index-camera"  title="Номер канала" >93</td>
+<td class="name" >93-Га 3 Back</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.32" >192.168.253.32</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="92" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P012.1(3.6)D_v.1</td>
+	<td class="status network"  version="" >V3.31.5.0_200312</td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="93"  network="" >
+<td class="index-camera"  title="Номер канала" >94</td>
+<td class="name" >94-Магазин Кушкуль-2</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.41" >192.168.253.41</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="93" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="94"  network="" >
+<td class="index-camera"  title="Номер канала" >95</td>
+<td class="name" >95-Магазин Кушкуль-3</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.42" >192.168.253.42</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="94" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="disabled"  index="95"  network="" >
+<td class="index-camera"  title="Номер канала" >96</td>
+<td class="name" >camera96</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.406" >192.168.253.406</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Выключена" ></td></tr><tr class="camera-detail"  index="95" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="96"  network="" >
+<td class="index-camera"  title="Номер канала" >97</td>
+<td class="name" >97-Ангар</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.47" >192.168.253.47</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="96" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF</td>
+	<td class="status network"  model="" >Optimus_IP-P013.0(3.6)D</td>
+	<td class="status network"  version="" >V2.31.5.2_200420</td>
+	<td class="status"  stream="1"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="2"  status="disabled"  title="Выключена" ></td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status=""  index="97"  network="" >
+<td class="index-camera"  title="Номер канала" >98</td>
+<td class="name" >98-Ангар-1</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.48" >192.168.253.48</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="41118254" >********</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="" ></td></tr><tr class="camera-detail"  index="97" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="98"  network="" >
+<td class="index-camera"  title="Номер канала" >99</td>
+<td class="name" >camera99</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="98" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status=""  title="" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="error"  index="99"  network="" >
+<td class="index-camera"  title="Номер канала" >100</td>
+<td class="name" >100-Курилка-вход</td>
+<td class="ip" ><a class="weblink"  name="weblink"  href="http://192.168.253.70" >192.168.253.70</a></td>
+<td class="port" >80</td>
+<td class="user" >admin</td>
+<td class="pass"  title="1111" >****</td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Нет сигнала" ></td></tr><tr class="camera-detail"  index="99" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >Huanghe</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" >3.11.0.4.0.38</td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="ok" >ОК</td>
+	<td class="status"  codec=""  status="ok" >ОК</td>
+	<td class="status"  ptz=""  status="ok" >ОК</td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="100"  network="" >
+<td class="index-camera"  title="Номер канала" >101</td>
+<td class="name" >camera101</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="100" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="error"  title="Нет сигнала" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="101"  network="" >
+<td class="index-camera"  title="Номер канала" >102</td>
+<td class="name" >camera102</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="101" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="102"  network="" >
+<td class="index-camera"  title="Номер канала" >103</td>
+<td class="name" >camera103</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="102" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="103"  network="" >
+<td class="index-camera"  title="Номер канала" >104</td>
+<td class="name" >camera104</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="103" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="104"  network="" >
+<td class="index-camera"  title="Номер канала" >105</td>
+<td class="name" >camera105</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="104" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="105"  network="" >
+<td class="index-camera"  title="Номер канала" >106</td>
+<td class="name" >camera106</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="105" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="106"  network="" >
+<td class="index-camera"  title="Номер канала" >107</td>
+<td class="name" >camera107</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="106" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="107"  network="" >
+<td class="index-camera"  title="Номер канала" >108</td>
+<td class="name" >camera108</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="107" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="108"  network="" >
+<td class="index-camera"  title="Номер канала" >109</td>
+<td class="name" >camera109</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="108" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="109"  network="" >
+<td class="index-camera"  title="Номер канала" >110</td>
+<td class="name" >camera110</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="109" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="110"  network="" >
+<td class="index-camera"  title="Номер канала" >111</td>
+<td class="name" >camera111</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="110" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="111"  network="" >
+<td class="index-camera"  title="Номер канала" >112</td>
+<td class="name" >camera112</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="111" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="112"  network="" >
+<td class="index-camera"  title="Номер канала" >113</td>
+<td class="name" >camera113</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="112" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="113"  network="" >
+<td class="index-camera"  title="Номер канала" >114</td>
+<td class="name" >camera114</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="113" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="114"  network="" >
+<td class="index-camera"  title="Номер канала" >115</td>
+<td class="name" >camera115</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="114" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="115"  network="" >
+<td class="index-camera"  title="Номер канала" >116</td>
+<td class="name" >camera116</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="115" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="116"  network="" >
+<td class="index-camera"  title="Номер канала" >117</td>
+<td class="name" >camera117</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="116" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="117"  network="" >
+<td class="index-camera"  title="Номер канала" >118</td>
+<td class="name" >camera118</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="117" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="118"  network="" >
+<td class="index-camera"  title="Номер канала" >119</td>
+<td class="name" >camera119</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="118" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="119"  network="" >
+<td class="index-camera"  title="Номер канала" >120</td>
+<td class="name" >camera120</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="119" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="120"  network="" >
+<td class="index-camera"  title="Номер канала" >121</td>
+<td class="name" >camera121</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="120" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="121"  network="" >
+<td class="index-camera"  title="Номер канала" >122</td>
+<td class="name" >camera122</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="121" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="122"  network="" >
+<td class="index-camera"  title="Номер канала" >123</td>
+<td class="name" >camera123</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="122" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="123"  network="" >
+<td class="index-camera"  title="Номер канала" >124</td>
+<td class="name" >camera124</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="123" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="124"  network="" >
+<td class="index-camera"  title="Номер канала" >125</td>
+<td class="name" >camera125</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="124" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="125"  network="" >
+<td class="index-camera"  title="Номер канала" >126</td>
+<td class="name" >camera126</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="125" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="126"  network="" >
+<td class="index-camera"  title="Номер канала" >127</td>
+<td class="name" >camera127</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="126" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >AUTO</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr><tr class="camera"  status="not-connected"  index="127"  network="" >
+<td class="index-camera"  title="Номер канала" >128</td>
+<td class="name" >camera128</td>
+<td class="ip" ><a class="weblink"  name="weblink" ></a></td>
+<td class="port" ></td>
+<td class="user" ></td>
+<td class="pass"  title="" ></td>
+<td class="edit" ></td>
+<td class="info" ></td>
+<td class="status"  title="Не подключена" ></td></tr><tr class="camera-detail"  index="127" >
+<td colspan="8" >
+	<table><tr class="head" >
+		<th network="" >Протокол</th>
+		<th network="" >Модель</th>
+		<th network="" >Прошивка</th>
+		<th>1 поток</th>
+		<th>2 поток</th>
+		<th>Аудио</th>
+		<th>Сенсор</th>
+		<th>Кодирование</th>
+		<th>PTZ</th></tr><tr class="body camera-info" >
+	<td class="status network"  proto="" >ONVIF (G.711 A-law)</td>
+	<td class="status network"  model="" ></td>
+	<td class="status network"  version="" ></td>
+	<td class="status"  stream="1"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="2"  status="not-connected"  title="Не подключена" >ОШИБКА</td>
+	<td class="status"  stream="3" ></td>
+	<td class="status"  imaging=""  status="disabled" ></td>
+	<td class="status"  codec=""  status="disabled" ></td>
+	<td class="status"  ptz=""  status="disabled" ></td></tr>
+</table>
+</td></tr>
+</tbody>
+</table>
+  </body>
+</html>
