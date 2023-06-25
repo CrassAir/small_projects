@@ -1,3 +1,5 @@
 .idea
 /parse_cams_html_to_txt/build
+/parse_cams_html_to_txt/*.htm
+/parse_cams_html_to_txt/*.txt
 *.spec

@@ -8,7 +8,7 @@ DEFAULT_SORTED_OUTPUT_FILE_NAME = 'cams_sort.txt'
 
 def desc(ip):
     lst = [int(i) for i in ip.split('.')]
-    return lst[0] * 256 ** 3 + lst[1] * 256 ** 2 + lst[2] * 256 + lst[3]
+    return (lst[0] * 256 ** 3 + lst[1] * 256 ** 2 + lst[2] * 256 + lst[3]) * 100
 
 
 def sorted_dict(dct):
@@ -27,14 +27,21 @@ def parser():
             for camera in table_cams.select('tr.camera'):
                 ip = camera.select_one('.ip').select_one('a').get_text()
                 name = camera.select_one('.name').get_text()
-                if not ip or int(ip.split('.')[-1]) > 254:
+                if not ip:
                     continue
-                result_dict[desc(ip)] = f'{ip} cam{name},'
+                key = desc(ip)
+                if result_dict.get(key) or int(ip.split('.')[-1]) > 254:
+                    answer = input(f'{ip} - уже есть в списке оставить?(Enter or n): ')
+                    if answer == 'n':
+                        continue
+                    else:
+                        while result_dict.get(key):
+                            key += 1
+                result_dict[key] = f'{ip} cam{name},'
         with open(DEFAULT_OUTPUT_FILE_NAME, 'w+', encoding='utf-8') as o_file:
             o_file.writelines('\n'.join(list(result_dict.values())))
         with open(DEFAULT_SORTED_OUTPUT_FILE_NAME, 'w+', encoding='utf-8') as o_file:
             o_file.writelines('\n'.join(list(sorted_dict(result_dict).values())))
-            os.startfile(DEFAULT_SORTED_OUTPUT_FILE_NAME)
     except Exception:
         print(f'Нет файла {DEFAULT_INPUT_FILE_NAME} в корне программы!!!')
 
@@ -47,4 +54,5 @@ if __name__ == '__main__':
           'при зваершении работы автоматически откроется сортированный файл\n'
           '-------------------------- by CrassAir --------------------------\n')
     parser()
-    input('Работа парсера закончена...')
+    input('Работа парсера закончена... для выхода нажмите Enter')
+    os.startfile(DEFAULT_SORTED_OUTPUT_FILE_NAME)
