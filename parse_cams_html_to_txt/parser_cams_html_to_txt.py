@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as BS
 import os
+import re
 
 DEFAULT_INPUT_FILE_NAME = 'cams.htm'
 DEFAULT_OUTPUT_FILE_NAME = 'cams.txt'
@@ -7,7 +8,7 @@ DEFAULT_SORTED_OUTPUT_FILE_NAME = 'cams_sort.txt'
 
 
 def desc(ip):
-    lst = [int(i) for i in ip.split('.')]
+    lst = [int(i) for i in re.findall('\d+', ip)]
     return (lst[0] * 256 ** 3 + lst[1] * 256 ** 2 + lst[2] * 256 + lst[3]) * 100
 
 
@@ -42,8 +43,11 @@ def parser():
             o_file.writelines('\n'.join(list(result_dict.values())))
         with open(DEFAULT_SORTED_OUTPUT_FILE_NAME, 'w+', encoding='utf-8') as o_file:
             o_file.writelines('\n'.join(list(sorted_dict(result_dict).values())))
-    except Exception:
+        return True
+    except Exception as e:
+        print(e)
         print(f'Нет файла {DEFAULT_INPUT_FILE_NAME} в корне программы!!!')
+    return False
 
 
 if __name__ == '__main__':
@@ -53,6 +57,7 @@ if __name__ == '__main__':
           f'на выходе будет 2 файла {DEFAULT_OUTPUT_FILE_NAME} и отсортированый {DEFAULT_SORTED_OUTPUT_FILE_NAME}\n'
           'при зваершении работы автоматически откроется сортированный файл\n'
           '-------------------------- by CrassAir --------------------------\n')
-    parser()
+    is_success = parser()
+    if is_success:
+        os.startfile(DEFAULT_SORTED_OUTPUT_FILE_NAME)
     input('Работа парсера закончена... для выхода нажмите Enter')
-    os.startfile(DEFAULT_SORTED_OUTPUT_FILE_NAME)
